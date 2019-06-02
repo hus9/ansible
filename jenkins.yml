@@ -8,10 +8,15 @@
       yum: name=java-1.8.0-openjdk state=present
     
     - name: download jenkins.repo
-      get_url: url:http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo dest:/etc/yum.repos.d/jenkins.repo
+      get_url:
+        url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo 
+        dest: /etc/yum.repos.d/jenkins.repo
+        mode: '0770'
     
     - name: import jenkins key
-      rpm_key: state=present key:https://jenkins-ci.org/redhat/jenkins-ci.org.key
+      rpm_key: 
+        state: present 
+        key: https://jenkins-ci.org/redhat/jenkins-ci.org.key
     
     - name: install jenkins
       yum: name=jenkins state=present
@@ -22,12 +27,18 @@
     - name: enable jenkins service on reboot
       systemd: name=jenkins enabled=true
     
-    - name: sleep for 30 seconds and continue to play
-      wait_for: timeout=30  delegate_to:localhost
+    - name: sleep for 130 seconds and continue to play
+      wait_for: 
+        timeout: 130  
+      delegate_to: localhost
     
     - name: initial password for jenkins
-      shell: cat /var/lib/jenkis/secrets/initialAdminPassword changed_when=false register=result
+      shell: cat /var/lib/jenkis/secrets/initialAdminPassword 
+      changed_when: false 
+      register: result
     
     - name: print initial jenkins admin password
-      debug: var:result.stdout
-      
+      debug: 
+        var: result.stdout
+     
+
